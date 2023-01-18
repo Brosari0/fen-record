@@ -23,19 +23,40 @@ export class FenRecord {
     this.data = DefaultFenData
   }
 
-  get activeColor() {
-    return this._dataParts[FenParts.ACTIVE_COLOR]
+  movePieceByRowCol(fromR: number, fromC: number, toR: number, toC: number) {
+    const board = this.board
+    board[toR][toC] = board[fromR][fromC]
+    board[fromR][fromC] = ""
+    this.board = board
   }
 
-  private get _dataParts(): string[] {
-    return this.data.split(" ")
+  set board(value: string[][]) {
+    const board = this.board
+    const data: string[] = []
+    for (let r = 0; r < board.length; r++) {
+      const row = board[r]
+      let counter = 0
+      let current = ""
+      for (let c = 0; c < row.length; c++) {
+        if (row[c] === "") {
+          counter++
+        } else {
+          if (counter > 0) {
+            current += counter
+            counter = 0
+          }
+          current += row[c]
+        }
+      }
+    }
+    
+    
+    const list = this._dataParts
+    list[FenParts.PIECE_PLACEMENT_DATA] = data.join("/")
+    this.data = list.join(" ")
   }
 
-  get piecePlacementData(): string {
-    return this._dataParts[FenParts.PIECE_PLACEMENT_DATA]
-  }
-
-  get board() {
+  get board(): string[][] {
     const data = this.piecePlacementData.split("/")
     const board = Array(8)
 
@@ -52,6 +73,25 @@ export class FenRecord {
 
     return board
   }
+
+  get isWhitesMove(): boolean {
+    return this._dataParts[FenParts.ACTIVE_COLOR] === "w"
+  }
+
+  set isWhitesMove(isWhite: boolean) {
+    const list = this._dataParts
+    list[FenParts.ACTIVE_COLOR] = isWhite ? "w" : "b"
+    this.data = list.join(" ")
+  }
+
+  private get _dataParts(): string[] {
+    return this.data.split(" ")
+  }
+
+  get piecePlacementData(): string {
+    return this._dataParts[FenParts.PIECE_PLACEMENT_DATA]
+  }
+
 
   private updateCastlingAvailability(blackKingSide: boolean, blackQueenSide: boolean, whiteKingSide: boolean, whiteQueenSide: boolean) {
     const list = this._dataParts
@@ -105,6 +145,28 @@ export class FenRecord {
 
   get halfMoveClock(): number {
     return Number(this._dataParts[FenParts.HALF_MOVE_CLOCK])
+  }
+
+  set fullMoveNumber(value) {
+    const list = this._dataParts
+    list[FenParts.FULL_MOVE_NUMBER] = `${value}`
+    this.data = list.join(" ")
+  }
+
+  set halfMoveClock(value) {
+    const list = this._dataParts
+    list[FenParts.HALF_MOVE_CLOCK] = `${value}`
+    this.data = list.join(" ")
+  }
+
+  incrementFullMoveNumber(): number {
+    this.fullMoveNumber += 1
+    return this.fullMoveNumber
+  }
+
+  incrementhalfMoveClock(): number {
+    this.halfMoveClock += 1
+    return this.halfMoveClock
   }
 }
 
