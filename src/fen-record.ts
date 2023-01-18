@@ -27,7 +27,7 @@ export class FenRecord {
     return this._dataParts[FenParts.ACTIVE_COLOR]
   }
 
-  get _dataParts(): string[] {
+  private get _dataParts(): string[] {
     return this.data.split(" ")
   }
 
@@ -53,6 +53,13 @@ export class FenRecord {
     return board
   }
 
+  private updateCastlingAvailability( blackKingSide: boolean, blackQueenSide: boolean, whiteKingSide: boolean, whiteQueenSide: boolean) {
+    const list = this._dataParts
+    list[FenParts.CASTLING_AVAILABILITY] = 
+    `${blackKingSide ? "K" : ""}${blackQueenSide ? "Q" : ""}${whiteKingSide ? "k" : ""}${whiteQueenSide ? "q" : ""}`
+    this.data = list.join(" ");
+  }
+
   get castlingAvailability(): string {
     return this._dataParts[FenParts.CASTLING_AVAILABILITY]
   }
@@ -61,9 +68,9 @@ export class FenRecord {
     return this.castlingAvailability.includes("k")
   }
 
-  set whiteCanCastleQueensSide(value) {
-    this.castlingAvailability.includes("q")
-  }
+  // set whiteCanCastleQueensSide(value) {
+  //   this.updateCastlingAvailability(this.)
+  // }
 
   get blackCanCastleQueensSide(): boolean {
     return this.castlingAvailability.includes("K")
