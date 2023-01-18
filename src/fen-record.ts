@@ -62,37 +62,37 @@ export class FenRecord {
   get castlingAvailability(): string {
     return this._dataParts[FenParts.CASTLING_AVAILABILITY]
   }
-
-  get whiteCanCastleQueensSide(): boolean {
-    return this.castlingAvailability.includes("k")
-  }
-
-  set whiteCanCastleQueensSide(value) {
-    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, value)
-  }
-
-  get blackCanCastleQueensSide(): boolean {
-    return this.castlingAvailability.includes("K")
-  }
-
-  set blackCanCastleQueensSide(value) {
-    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
-  }
-
+  
   get blackCanCastleKingsSide(): boolean {
     return this.castlingAvailability.includes("K")
   }
 
-  set blackCanCastleKingsSide(value) {
-    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
+  get blackCanCastleQueensSide(): boolean {
+    return this.castlingAvailability.includes("Q")
   }
-
+  
   get whiteCanCastleKingsSide(): boolean {
-    return this.castlingAvailability.includes("K")
+    return this.castlingAvailability.includes("k")
   }
 
+  get whiteCanCastleQueensSide(): boolean {
+    return this.castlingAvailability.includes("q")
+  }
+
+  set blackCanCastleKingsSide(value) {
+    this.updateCastlingAvailability(value, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
+  }
+  
+  set blackCanCastleQueensSide(value) {
+    this.updateCastlingAvailability(this.blackCanCastleKingsSide, value, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
+  }
+  
   set whiteCanCastleKingsSide(value) {
-    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
+    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, value, this.whiteCanCastleQueensSide)
+  }
+
+  set whiteCanCastleQueensSide(value) {
+    this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, value)
   }
 
   get enPassantSquare(): string {
