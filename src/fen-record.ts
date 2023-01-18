@@ -31,28 +31,36 @@ export class FenRecord {
   }
 
   set board(value: string[][]) {
-    const board = this.board
-    const data: string[] = []
+    const board: string[][] = this.board /* copy the currrent board[][] */
+    const newRowValues: string[] = [] /* holds the new row values */
     for (let r = 0; r < board.length; r++) {
-      const row = board[r]
-      let counter = 0
-      let current = ""
+      const row = board[r] /* references the current board row */
+      let counter = 0 /* tracks the number of empty squares as the row column is iterated over */
+      let rowResult = "" /* stores the string notation of the current row */
       for (let c = 0; c < row.length; c++) {
         if (row[c] === "") {
+          /* Current square is empty */
           counter++
         } else {
+          /* Current square contains a piece */
           if (counter > 0) {
-            current += counter
-            counter = 0
+            /* take the count of empty square before this column and append it to the current row result*/
+            rowResult += counter
+            counter = 0 /* Resset the empty square counter */
           }
-          current += row[c]
+          rowResult += row[c] /* Add the current piece to the row result */
         }
       }
+      /* Add the current row result to the values array */
+      newRowValues.push(rowResult)
     }
-    
-    
+
     const list = this._dataParts
-    list[FenParts.PIECE_PLACEMENT_DATA] = data.join("/")
+    /* Join the new row values deleimited with a forword slash 
+    and  assign it to the piece placement element */
+    list[FenParts.PIECE_PLACEMENT_DATA] = newRowValues.join("/")
+
+    /* Update the string data */
     this.data = list.join(" ")
   }
 
@@ -92,7 +100,6 @@ export class FenRecord {
     return this._dataParts[FenParts.PIECE_PLACEMENT_DATA]
   }
 
-
   private updateCastlingAvailability(blackKingSide: boolean, blackQueenSide: boolean, whiteKingSide: boolean, whiteQueenSide: boolean) {
     const list = this._dataParts
     list[FenParts.CASTLING_AVAILABILITY] = `${blackKingSide ? "K" : ""}${blackQueenSide ? "Q" : ""}${whiteKingSide ? "k" : ""}${whiteQueenSide ? "q" : ""}`
@@ -102,7 +109,7 @@ export class FenRecord {
   get castlingAvailability(): string {
     return this._dataParts[FenParts.CASTLING_AVAILABILITY]
   }
-  
+
   get blackCanCastleKingsSide(): boolean {
     return this.castlingAvailability.includes("K")
   }
@@ -110,7 +117,7 @@ export class FenRecord {
   get blackCanCastleQueensSide(): boolean {
     return this.castlingAvailability.includes("Q")
   }
-  
+
   get whiteCanCastleKingsSide(): boolean {
     return this.castlingAvailability.includes("k")
   }
@@ -122,11 +129,11 @@ export class FenRecord {
   set blackCanCastleKingsSide(value) {
     this.updateCastlingAvailability(value, this.blackCanCastleQueensSide, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
   }
-  
+
   set blackCanCastleQueensSide(value) {
     this.updateCastlingAvailability(this.blackCanCastleKingsSide, value, this.whiteCanCastleKingsSide, this.whiteCanCastleQueensSide)
   }
-  
+
   set whiteCanCastleKingsSide(value) {
     this.updateCastlingAvailability(this.blackCanCastleKingsSide, this.blackCanCastleQueensSide, value, this.whiteCanCastleQueensSide)
   }
