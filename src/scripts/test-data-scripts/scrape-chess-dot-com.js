@@ -72,7 +72,7 @@ function currentBoard() {
     for (let r = 0; r < 8; r++) {
         board.push(Array(8).fill(''))
         for (let c = 0; c < 8; c++) {
-            const piece = document.querySelector(`.square-${r + 1}${c + 1}`)
+            const piece = document.querySelector(`.square-${c + 1}${r + 1}`)
             if (piece) {
                 const pieceClass = piece.classList[1]
                 const color = pieceClass[0]

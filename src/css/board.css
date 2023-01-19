@@ -1,0 +1,161 @@
+* {
+  box-sizing: border-box;
+  --tile-color-white: #f0d9b5;
+  --tile-color-black: #b58863;
+  --tile-border-color-preview: green;
+  --tile-color-active: yellow;
+  --tile-background-image-size: 80%;
+  --column-min-max-width: 400px;
+  --column-gap: 1rem;
+  --row-gap: 1rem;
+  --grid-size: 64vh;
+  --tile-size: calc(var(--grid-size) / 8);
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section.tray {
+  display: flex;
+}
+
+section.tray div[data-role] {
+  width: var(--tile-size);
+  height: var(--tile-size);
+  cursor: move;
+}
+
+section.board {
+  margin: auto;
+  display: grid;
+  width: var(--grid-size);
+  min-height: var(--grid-size);
+  border: 1px solid black;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+section.board div[data-role] {
+  background-color: var(--tile-color-white);
+  color: var(--tile-color-black) !important;
+  position: relative;
+}
+
+/*
+  * Here we define a css selector for each row in our board grid
+  * next we alternate coloring odd and even elements in each row
+  */
+section.board div:nth-child(-n + 8):nth-child(even),
+section.board div:nth-child(n + 8):nth-child(-n + 16):nth-child(odd),
+section.board div:nth-child(n + 17):nth-child(-n + 24):nth-child(even),
+section.board div:nth-child(n + 25):nth-child(-n + 32):nth-child(odd),
+section.board div:nth-child(n + 33):nth-child(-n + 40):nth-child(even),
+section.board div:nth-child(n + 41):nth-child(-n + 48):nth-child(odd),
+section.board div:nth-child(n + 49):nth-child(-n + 56):nth-child(even),
+section.board div:nth-child(n + 57):nth-child(-n + 64):nth-child(odd) {
+  background-color: var(--tile-color-black) !important;
+  color: var(--tile-color-white) !important;
+}
+
+div[data-role] {
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  width: var(--tile-size);
+  height: var(--tile-size);
+  background-repeat: no-repeat;
+  background-size: var(--tile-background-image-size);
+  background-position: center;
+}
+
+div[data-role="E"] {
+  background-image: url("../../assets/pieces/Chess_pdt45.svg.png");
+  opacity: 50%;
+}
+
+div[data-role="e"] {
+  background-image: url("../../assets/pieces/Chess_plt45.svg.png");
+  opacity: 50%;
+}
+
+div[data-role="B"] {
+  background-image: url("../../assets/pieces/Chess_bdt45.svg.png");
+}
+
+div[data-role="b"] {
+  background-image: url("../../assets/pieces/Chess_blt45.svg.png");
+}
+
+div[data-role="K"] {
+  background-image: url("../../assets/pieces/Chess_kdt45.svg.png");
+}
+
+div[data-role="k"] {
+  background-image: url("../../assets/pieces/Chess_klt45.svg.png");
+}
+
+div[data-role="N"] {
+  background-image: url("../../assets/pieces/Chess_ndt45.svg.png");
+}
+
+div[data-role="n"] {
+  background-image: url("../../assets/pieces/Chess_nlt45.svg.png");
+}
+
+div[data-role="P"] {
+  background-image: url("../../assets/pieces/Chess_pdt45.svg.png");
+}
+
+div[data-role="p"] {
+  background-image: url("../../assets/pieces/Chess_plt45.svg.png");
+}
+
+div[data-role="Q"] {
+  background-image: url("../../assets/pieces/Chess_qdt45.svg.png");
+}
+
+div[data-role="q"] {
+  background-image: url("../../assets/pieces/Chess_qlt45.svg.png");
+}
+
+div[data-role="R"] {
+  background-image: url("../../assets/pieces/Chess_rdt45.svg.png");
+}
+
+div[data-role="r"] {
+  background-image: url("../../assets/pieces/Chess_rlt45.svg.png");
+}
+
+section.board div[data-role]::before,
+section.board div[data-role]::after {
+  display: block;
+  position: absolute;
+  font-size: medium;
+  font-weight: bolder;
+  z-index: 10;
+}
+
+section.board div:nth-child(n + 57):nth-child(-n + 64)::after {
+  content: attr(data-file);
+  bottom: 1px;
+  right: 0.5rem;
+}
+
+section.board div[data-role]:nth-child(8n + 1)::before {
+  content: attr(data-rank);
+  top: 1px;
+  left: 0.5rem;
+}
+
+.preview span {
+  /* display: block; */
+  border-radius: 50%;
+  outline: 0.5px solid green;
+  padding: 0;
+  margin: 0;
+  width: 80%;
+  height: 80%;
+}
