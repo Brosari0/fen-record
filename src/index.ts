@@ -1,7 +1,3 @@
-import { FenRecord } from "./fen-record"
+import { runAllTests } from "./unit-test"
 
-const fen = new FenRecord()
-// fen.blackCanCastleKingsSide = false
-
-console.log(fen)
-console.table(fen.board)
+runAllTests()
