@@ -7,9 +7,8 @@ header("Access-Control-Allow-Methods: PUT, POST, GET, OPTIONS, DELETE");
 // audio/wav
 $result = new stdClass();
 $game_id = $_GET["game-id"];
-$pathname = "./scripts/test-data/" . $game_id . ".json";
+$pathname = "../test-data/" . $game_id . ".json";
 
-echo $pathname;
 $result->pathname = $pathname;
 
 if (file_exists($pathname)) {
@@ -21,6 +20,9 @@ $data = json_decode($data);
 $contents = json_encode($data, JSON_PRETTY_PRINT);
 
 if (strlen($contents) === 0) {
+    $result->error = "No data received";
+    echo json_encode($result);
+
     return;
 }
 

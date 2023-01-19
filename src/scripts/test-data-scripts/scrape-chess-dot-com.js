@@ -7,49 +7,57 @@ console.clear()
 
 let game = {
     id: id,
-    href: '',
+    href: "",
     boards: null,
-    fullMoveNumber: -1
+    fullMoveNumber: -1,
+    result: ""
 }
 
-let moveSet = null
+let moveSet = new Set()
 const playsSelector = `[data-ply].node`
 
 initGame()
 addEventListener()
 
+function playIndex(element) {
+    return element.dataset.ply
+}
+
+/* <div data-ply="1" class="white node">d4</div> */
 function initGame() {
+    const plays = document.querySelectorAll(`${playsSelector}:not(.game-result)`)
     game.id = window.location.pathname.split('/').pop()
     game.href = window.location.href
-    game.boards = {}
-    game.fullMoveNumber = document.querySelectorAll(`${playsSelector}`).length
-    /* <div data-ply="1" class="white node">d4</div> */
-    const plays = document.querySelectorAll(`${playsSelector}`)
+    game.moves = {}
+    game.fullMoveNumber = plays.length
+    game.result = document.querySelector(`.game-result`).textContent
 
     plays.forEach((play) => {
         if (play.classList.contains('white') || play.classList.contains('black')) {
             const notation = play.textContent
-            game.boards[notation] = null
+            const index = playIndex(play)
+            game.moves[index] = {
+                notation, board: null, index
+            }
         }
     })
 }
 
 function addEventListener() {
-    moveSet = new Set()
-
     document.removeEventListener("click", clickListener, false)
     document.addEventListener("click", clickListener, false)
 
     function clickListener(e) {
         /* <div data-ply="3" class="white node selected"><span class="icon-font-chess bishop-white" data-figurine="B"></span>f4</div> */
         const play = document.querySelector(`${playsSelector}.selected`)
-        if (!(play.classList.contains('white') || play.classList.contains('black'))) return
+        if (play.classList.contains('game-result')) return
 
         const notation = play.textContent
-        game.boards[notation] = currentBoard()
+        const index = playIndex(play)
+        game.moves[index].board = currentBoard()
 
-        moveSet.add(notation)
-        console.log(moveSet.size)
+        moveSet.add(index)
+        play.style.visibility = "hidden"
         if (moveSet.size === game.fullMoveNumber) {
             console.log("Done!")
             console.log(game)
@@ -77,7 +85,7 @@ function currentBoard() {
 }
 
 function postGame(game) {
-    fetch(`http://localhost/npm-packages/fen-record/src/filesaver.php?game-id=${game.id}`, {
+    fetch(`http://localhost/npm-packages/fen-record/src/scripts/test-data-scripts/filesaver.php?game-id=${game.id}`, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
