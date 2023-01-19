@@ -31,7 +31,8 @@ export class FenRecord {
   }
 
   set board(value: string[][]) {
-    const board: string[][] = this.board /* copy the currrent board[][] */
+    const board: string[][] = this.board /* copy the current board[][] */
+    // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
     const newRowValues: string[] = [] /* holds the new row values */
     for (let r = 0; r < board.length; r++) {
       const row = board[r] /* references the current board row */
@@ -51,6 +52,7 @@ export class FenRecord {
           rowResult += row[c] /* Add the current piece to the row result */
         }
       }
+      if (counter > 0) rowResult += counter
       /* Add the current row result to the values array */
       newRowValues.push(rowResult)
     }
