@@ -1,3 +1,3 @@
 import { runAllTests } from "./unit-test"
 
-runAllTests()
+console.log(runAllTests())
